@@ -42,13 +42,13 @@ func refreshProjects(w http.ResponseWriter) {
 		utils.PrintlnAndFlush(w, "* Building project")
 		_, err = build.BuildProject(dir, w)
 		if err != nil {
-			log.Fatal(err)
+			utils.PrintlnAndFlush(w, err.Error())
 		}
 		// Run project
 		utils.PrintlnAndFlush(w, "* Running project\n")
 		err = run.RunProject(dir)
 		if err != nil {
-			log.Fatal(err)
+			utils.PrintlnAndFlush(w, err.Error())
 		}
 	}
 	utils.PrintlnAndFlush(w, "== FINISH")
