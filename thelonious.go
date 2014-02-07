@@ -19,14 +19,14 @@ func main() {
 	projects_url = os.Args[1]
 	// Start service
         http.HandleFunc("/refresh", func(w http.ResponseWriter, r *http.Request) {
-		refreshProjects()
+			refreshProjects(w)
         })
         log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
-func refreshProjects() {
+func refreshProjects(w http.ResponseWriter) {
 	// Get project info
-	fmt.Println("Fetching projects")
+	PrintlnAndFlush(w, "== START")
 	var err error
 	var projects []fetch.Projectlister
 	if projects, err = fetch.FetchProjectsFromInternet(projects_url); err != nil {
@@ -34,21 +34,35 @@ func refreshProjects() {
 	} 
 	for _, p := range projects {
 		// Clone projects
-		fmt.Print("Cloning project: ")
+		PrintAndFlush(w, "Cloning project: ")
 		var dir string
 		dir, err = clone.CloneProject(p.GetUrl())
-		fmt.Println(dir)
+		PrintlnAndFlush(w, dir)
 		// Build them
-		fmt.Println("Building project")
+		PrintlnAndFlush(w, "Building project")
 		_, err = build.BuildProject(dir)
 		if err != nil {
 			log.Fatal(err)
 		}
 		// Run project
-		fmt.Println("Running project:")
+		PrintlnAndFlush(w, "Running project")
 		err = run.RunProject(dir)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+	PrintlnAndFlush(w, "== FINISH")
+}
+
+func PrintlnAndFlush(w http.ResponseWriter, s string) {
+	PrintAndFlush(w, s+"\n")
+}
+
+func PrintAndFlush(w http.ResponseWriter, s string) {
+	fmt.Fprintf(w, s)	
+	if f, ok := w.(http.Flusher); ok {
+    	f.Flush()
+	} else {
+		log.Println("Damn, no flush");
+  	}
 }

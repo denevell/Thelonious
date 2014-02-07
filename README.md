@@ -4,4 +4,8 @@ New continuous deployment / integration project that should be merged into PartT
 
 ## Tasks
 
-* Provide logging for the caller of 'refresh'.
+* Log build / run errors to the web output
+
+## Done
+
+* ~~Provide logging for the caller of 'refresh'.~~
