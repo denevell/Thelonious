@@ -35,18 +35,17 @@ func refreshProjects(w http.ResponseWriter) {
 	} 
 	for _, p := range projects {
 		// Clone projects
-		utils.PrintAndFlush(w, "Cloning project: ")
-		var dir string
-		dir, err = clone.CloneProject(p.GetUrl())
-		utils.PrintlnAndFlush(w, dir)
+		utils.PrintlnAndFlush(w, "* Processing: " + p.GetUrl())
+		utils.PrintlnAndFlush(w, "* Cloning project")
+		dir, err := clone.CloneProject(p.GetUrl(), w)
 		// Build them
-		utils.PrintlnAndFlush(w, "Building project")
+		utils.PrintlnAndFlush(w, "* Building project")
 		_, err = build.BuildProject(dir)
 		if err != nil {
 			log.Fatal(err)
 		}
 		// Run project
-		utils.PrintlnAndFlush(w, "Running project")
+		utils.PrintlnAndFlush(w, "* Running project\n")
 		err = run.RunProject(dir)
 		if err != nil {
 			log.Fatal(err)
