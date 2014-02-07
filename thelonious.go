@@ -6,8 +6,8 @@ import "Thelonious/fetch"
 import "Thelonious/clone"
 import "Thelonious/build"
 import "Thelonious/run"
-import "fmt"
 import "net/http"
+import "Thelonious/utils"
 
 var projects_url string
 
@@ -26,7 +26,7 @@ func main() {
 
 func refreshProjects(w http.ResponseWriter) {
 	// Get project info
-	PrintlnAndFlush(w, "== START")
+	utils.PrintlnAndFlush(w, "== START")
 	var err error
 	var projects []fetch.Projectlister
 	if projects, err = fetch.FetchProjectsFromInternet(projects_url); err != nil {
@@ -34,35 +34,22 @@ func refreshProjects(w http.ResponseWriter) {
 	} 
 	for _, p := range projects {
 		// Clone projects
-		PrintAndFlush(w, "Cloning project: ")
+		utils.PrintAndFlush(w, "Cloning project: ")
 		var dir string
 		dir, err = clone.CloneProject(p.GetUrl())
-		PrintlnAndFlush(w, dir)
+		utils.PrintlnAndFlush(w, dir)
 		// Build them
-		PrintlnAndFlush(w, "Building project")
+		utils.PrintlnAndFlush(w, "Building project")
 		_, err = build.BuildProject(dir)
 		if err != nil {
 			log.Fatal(err)
 		}
 		// Run project
-		PrintlnAndFlush(w, "Running project")
+		utils.PrintlnAndFlush(w, "Running project")
 		err = run.RunProject(dir)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	PrintlnAndFlush(w, "== FINISH")
-}
-
-func PrintlnAndFlush(w http.ResponseWriter, s string) {
-	PrintAndFlush(w, s+"\n")
-}
-
-func PrintAndFlush(w http.ResponseWriter, s string) {
-	fmt.Fprintf(w, s)	
-	if f, ok := w.(http.Flusher); ok {
-    	f.Flush()
-	} else {
-		log.Println("Damn, no flush");
-  	}
+	utils.PrintlnAndFlush(w, "== FINISH")
 }
