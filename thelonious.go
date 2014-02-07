@@ -40,7 +40,7 @@ func refreshProjects(w http.ResponseWriter) {
 		dir, err := clone.CloneProject(p.GetUrl(), w)
 		// Build them
 		utils.PrintlnAndFlush(w, "* Building project")
-		_, err = build.BuildProject(dir)
+		_, err = build.BuildProject(dir, w)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -4,8 +4,10 @@ New continuous deployment / integration project that should be merged into PartT
 
 ## Tasks
 
-* Log build / run errors to the web output
+* Provide method for refreshing an individual project
+* Log the first x seconds of the command output before continuing
 
 ## Done
 
 * ~~Provide logging for the caller of 'refresh'.~~
+* ~~Log build / run errors to the web output~~

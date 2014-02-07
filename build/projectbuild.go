@@ -3,15 +3,17 @@ package build
 import "os"
 import "os/exec"
 import "path"
-//import "fmt"
+import "Thelonious/utils"
+import "io"
 
-func BuildProject(url string) (string, error) {
+func BuildProject(url string, w io.Writer) (string, error) {
 	cmd := exec.Command("go", "build", path.Base(url))
 	pwd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 	cmd.Env = append(cmd.Env, "GOPATH="+pwd)
-	_, err = cmd.Output()
+	cmdOutput, err := cmd.CombinedOutput()
+	utils.PrintAndFlush(w, string(cmdOutput))	
 	return path.Base(url), err
 }

@@ -3,7 +3,7 @@ package clone
 import "os"
 import "os/exec"
 import "path"
-import "fmt"
+import "Thelonious/utils"
 import "io"
 
 func CloneProject(url string, output io.Writer) (string, error) {
@@ -13,6 +13,6 @@ func CloneProject(url string, output io.Writer) (string, error) {
 	}
 	cmd := exec.Command("git", "clone", url, "src/"+path.Base(url))
 	cmdOutput, err := cmd.CombinedOutput()
-	fmt.Fprint(output, string(cmdOutput))
+	utils.PrintAndFlush(output, string(cmdOutput))
 	return path.Base(url), err
 }
