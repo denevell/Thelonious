@@ -6,6 +6,7 @@ New continuous deployment / integration project that should be merged into PartT
 
 * Provide method for refreshing an individual project
 * Log the first x seconds of the command output before continuing
+* Run processes separately from the server
 
 ## Done
 
