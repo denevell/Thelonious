@@ -13,15 +13,16 @@ var projects_url string
 
 func main() {
 	// Get projects url from vargs
-	if len(os.Args) != 2 {
-		log.Fatal("Usage: Thelonious http://url_to_projects_json_file")
+	if len(os.Args) != 3 {
+		log.Fatal("Usage: Thelonious http://url_to_projects_json_file :8000")
 	}
 	projects_url = os.Args[1]
+	serving_port := os.Args[2]
 	// Start service
         http.HandleFunc("/refresh", func(w http.ResponseWriter, r *http.Request) {
 			refreshProjects(w)
         })
-        log.Fatal(http.ListenAndServe(":8000", nil))
+        log.Fatal(http.ListenAndServe(serving_port, nil))
 }
 
 func refreshProjects(w http.ResponseWriter) {
