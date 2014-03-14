@@ -1,12 +1,19 @@
 package run
 
+import "os"
 import "os/exec"
-//import "fmt"
+import "fmt"
 
 func RunProject(command string) (error) {
 	exec.Command("killall", "-9", command).Run()
-	cmd := exec.Command("./"+command)
+	wd, _ := os.Getwd()
+	cmd := exec.Command(wd+"/src/"+command+"/"+command)
+	cmd.Dir = "src/"+command+"/"
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	fmt.Println(cmd.Dir)
+	fmt.Println(cmd.Path)
 	err := cmd.Start()
-	//fmt.Println(string(output))
+	fmt.Println(err)
 	return err
 }
